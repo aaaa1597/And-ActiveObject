@@ -2,21 +2,21 @@
 #define ACTIVEOBJECT_H
 
 #include <queue>
-#include <thread>
+#include <functional>
 
 #define D_THREADEND_MESSAGE 0x7777
 
 class Priority {
 public:
-    bool operator<(Priority const& rhs) const {
-        if(this->priority == rhs.priority)
-            return this->creationtime < rhs.creationtime;
-        return this->priority < rhs.priority;
-    }
+	bool operator<(Priority const& rhs) const {
+		if(this->priority == rhs.priority)
+			return this->creationtime < rhs.creationtime;
+		return this->priority < rhs.priority;
+	}
 
 private:
-    int priority;
-    int64_t  creationtime;
+	int priority;
+	int64_t  creationtime;
 	std::function<int()> func;
 };
 
@@ -28,6 +28,8 @@ private:
 
 public:	/* 公開用 */
 	static bool isInitializeing(int SurfaceID);
+	static void sendMessage(int SurfaceID, int MsgID);
+	static void sendMessage(int SurfaceID, std::function<int()> &func);
 	static void sendMessage(int SurfaceID, std::function<int()> &&func);
 	static void ThreadLoop(int SurfaceID);
 
